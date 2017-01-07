@@ -24,13 +24,11 @@ $3Dmol.DeviceOrientationControls = function(object) {
 
 
     var onDeviceOrientationChangeEvent = function(event) {
-
         scope.deviceOrientation = event;
 
     };
 
     var onScreenOrientationChangeEvent = function() {
-
         scope.screenOrientation = window.orientation || 0;
 
     };
@@ -48,15 +46,15 @@ $3Dmol.DeviceOrientationControls = function(object) {
         var q1 = new $3Dmol.Quaternion(-Math.sqrt(0.5), 0, 0, Math.sqrt(0.5)); // - PI/2 around the x-axis
 
         return function(quaternion, alpha, beta, gamma, orient) {
-
-            euler.set(alpha, beta, -gamma);//(beta, alpha, -gamma, 'YXZ'); // 'ZXY' for the device, but 'YXZ' for us
-
+            //The Euler Angles reported by the device is of the order "ZXY".
+            //For our purpose, we need to pass them to setFromEuler() in the order of "YXZ".
+            //euler.set(alpha, beta, -gamma);//(beta, alpha, -gamma, 'YXZ'); // 'ZXY' for the device, but 'YXZ' for us
+            euler.set(gamma, beta, alpha);
             quaternion.setFromEuler(euler); // orient the device
 
             quaternion.multiply(q1); // camera looks out the back of the device, not the top
 
             quaternion.multiply(q0.setFromAxisAngle(zee, -orient)); // adjust for screen orientation
-
         }
 
     }();
