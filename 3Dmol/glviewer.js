@@ -161,6 +161,9 @@ $3Dmol.GLViewer = (function() {
             if (!scene)
                 return;
             // var time = new Date();
+            if (controls) {
+                controls.update();
+            };
             setSlabAndFog();
             renderer.render(scene, camera);
             // console.log("rendered in " + (+new Date() - time) + "ms");
@@ -384,56 +387,21 @@ $3Dmol.GLViewer = (function() {
 
 
         //=================================================================================================================
-        //var lastDOCEvent = null;
-        function onDeviceOrientationChangeEvent(DOCEvent) {
 
-            /*_viewer.rotate(DOCEvent.alpha - lastDOCEvent.alpha, "x");
-            _viewer.rotate(DOCEvent.beta - lastDOCEvent.beta, "y");
-            _viewer.rotate(DOCEvent.gamma - lastDOCEvent.gamma, "z");*/
-
-            var yaw = DOCEvent.alpha; //around z -- "yaw"
-            var roll = DOCEvent.beta;   //around x -- "roll"
-            var pitch = DOCEvent.gamma; //around y -- "pitch"
-
-            //var x = Math.cos(gamma)*Math.cos(alpha);
-            //var y = Math.sin(gamma)*Math.cos(alpha);
-            //var z = Math.sin(alpha);
-
-            //temporary variables for calculating the quaterion
-
-            var t0 = Math.cos(yaw/2);
-            var t1 = Math.sin(yaw/2);
-            var t2 = Math.cos(roll/2);
-            var t3 = Math.sin(roll/2);
-            var t4 = Math.cos(pitch/2);
-            var t5 = Math.sin(pitch/2);
-
-            //update the rotation quaternion. Code copied from the setView() method:
-            rotationGroup.quaternion.w = t0*t2*t4+t1*t3*t5;
-            rotationGroup.quaternion.x = t0*t3*t4-t1*t2*t5;
-            rotationGroup.quaternion.y = t0*t2*t5+t1*t3*t4;
-            rotationGroup.quaternion.z = t1*t2*t4-t0*t3*t5;
-            show();
-            
-            //var lookingAt = new $3Dmol.Vector3(x,y,z);
-            //lookingAt.add(camera.position);
-            //console.log(camera.position, lookingAt, camera.up)
-            //camera.lookAt(camera.position, lookingAt, camera.up);
-            //lastDOCEvent = DOCEvent.copy();
-        }
-        //Procedure to enable Device Orientation Controls:
         function setOrientationControls(e) {
             if (!e.alpha) { //Check if the emitted "deviceorientation" event is well-formed
                 return;
             }
             //now initiate the Device Orientation Controls:
             console.log("Entered setOrientationControls().");
-            try {
-                window.addEventListener('deviceorientation', onDeviceOrientationChangeEvent, false);
-                //element.addEventListener('click', fullscreen, false);
-            } catch(err) {
-                console.log("Error happened while enabling Device Orientation Controls:", err);
-            };
+
+            controls = new $3Dmol.DeviceOrientationControls(camera, true);
+            controls.connect();
+            window.addEventListener('orientationchange', show, false);
+            window.addEventListener('deviceorientation', show, false);
+            controls.update();
+            camera.useQuaternion = true;
+            //element.addEventListener('click', fullscreen, false);
             window.removeEventListener('deviceorientation', setOrientationControls, true);
         }
         //Enable Device Orientation Controls only if the device emits "deviceorientation" events:
