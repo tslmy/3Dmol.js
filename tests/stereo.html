@@ -80,6 +80,12 @@ var readText = function(input,func) {
 		
 		setStyle({cartoon:{color: 'spectrum'}})
 		glviewer.zoomTo();
+
+		//for showing the orientation info on the interface:
+		window.addEventListener('deviceorientation', function(ev){$('#Orientation').text(
+			'alpha: '+Math.floor(ev.alpha)+
+			', beta: '+Math.floor(ev.beta)+
+			', gamma: '+Math.floor(ev.gamma))}, false);
 	});
 </script>
 </head>
@@ -88,6 +94,8 @@ var readText = function(input,func) {
 	<div id="gldiv2" style="position: relative; float: right; width: 50%; height: 80vh; margin: 0; padding: 0; border: 0;"></div>
 
 	<hr style="margin: 0;">
+
+	<p id="Orientation">Orientation</p>
 
 	<br>
 	<input type="button" value="Stick"
@@ -111,7 +119,6 @@ var readText = function(input,func) {
 		onclick="glviewer.clear(); m = $3Dmol.download('pdb:' + $('#pdbid').val(), glviewer, {doAssembly:true});glviewer2.clear(); $3Dmol.download('pdb:' + $('#pdbid').val(), glviewer2, {doAssembly:true});">Download</button>
 	<br>
 	<input type="file" onchange="readText(this, function(data, name) {glviewer.clear(); m= glviewer.addModel(data,name); glviewer.zoomTo(); glviewer.render();} );">
-
 	<textarea style="display: none;" id="moldata_pdb_large">           
 HEADER    COMPLEX (ONCOGENE PROTEIN/PEPTIDE)      30-SEP-96   1YCR              
 TITLE     MDM2 BOUND TO THE TRANSACTIVATION DOMAIN OF P53                       
