@@ -47,7 +47,7 @@ $3Dmol.DeviceOrientationControls = function(object) {
             //The Euler Angles reported by the device is of the order "ZXY".
             //For our purpose, we need to pass them to setFromEuler() in the order of "YXZ".
             //euler.set(alpha, beta, -gamma);//(beta, alpha, -gamma, 'YXZ'); // 'ZXY' for the device, but 'YXZ' for us
-            euler.set(gamma, beta, alpha);
+            euler.set(beta, alpha, -gamma);
             quaternion.setFromEuler(euler); // orient the device
 
             quaternion.multiply(q1); // camera looks out the back of the device, not the top
