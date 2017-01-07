@@ -82,10 +82,11 @@ var readText = function(input,func) {
 		glviewer.zoomTo();
 
 		//for showing the orientation info on the interface:
-		window.addEventListener('deviceorientation', function(ev){$('#Orientation').text(
-			'alpha: '+Math.floor(ev.alpha)+
-			', beta: '+Math.floor(ev.beta)+
-			', gamma: '+Math.floor(ev.gamma))}, false);
+		window.addEventListener('deviceorientation', function(ev){$('#Orientation > #device').text(
+			'alpha(z): '+Math.floor(ev.alpha)+
+			', beta(x): '+Math.floor(ev.beta)+
+			', gamma(y): '+Math.floor(ev.gamma))}, false);
+		window.addEventListener('orientationchange', function(ev){$('#Orientation > #screen').text(window.orientation)}, false);
 	});
 </script>
 </head>
@@ -95,7 +96,10 @@ var readText = function(input,func) {
 
 	<hr style="margin: 0;">
 
-	<p id="Orientation">Orientation</p>
+	<p id="Orientation">
+		<span id="device"></span> | 
+		<span id="screen"></span>
+	</p>
 
 	<br>
 	<input type="button" value="Stick"
