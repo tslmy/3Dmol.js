@@ -161,7 +161,7 @@ $3Dmol.GLViewer = (function() {
             if (!scene)
                 return;
             // var time = new Date();
-            if (controls) {
+            if (controls!==null) {
                 controls.update();
             };
             setSlabAndFog();
@@ -385,9 +385,9 @@ $3Dmol.GLViewer = (function() {
 
         });
 
-
         //=================================================================================================================
 
+        var controls = null;
         function setOrientationControls(e) {
             if (!e.alpha) { //Check if the emitted "deviceorientation" event is well-formed
                 return;

@@ -22,10 +22,10 @@ $3Dmol.DeviceOrientationControls = function(object) {
     this.alpha = 0;
     this.alphaOffsetAngle = 0;
 
+    this.initialDeviceOrientation = null;
 
     var onDeviceOrientationChangeEvent = function(event) {
         scope.deviceOrientation = event;
-
     };
 
     var onScreenOrientationChangeEvent = function() {
@@ -87,6 +87,14 @@ $3Dmol.DeviceOrientationControls = function(object) {
         var beta = scope.deviceOrientation.beta ? $3Dmol.Math.degToRad(scope.deviceOrientation.beta) : 0; // X'
         var gamma = scope.deviceOrientation.gamma ? $3Dmol.Math.degToRad(scope.deviceOrientation.gamma) : 0; // Y''
         var orient = scope.screenOrientation ? $3Dmol.Math.degToRad(scope.screenOrientation) : 0; // O
+
+        if (scope.initialDeviceOrientation==null) {
+            scope.initialDeviceOrientation = {alpha:alpha, beta:beta, gamma:gamma, orient:orient};
+        } else {
+            alpha -= scope.initialDeviceOrientation.alpha;
+            beta -= scope.initialDeviceOrientation.beta;
+            gamma -= scope.initialDeviceOrientation.gamma;
+        }
 
         setObjectQuaternion(scope.object.quaternion, alpha, beta, gamma, orient);
         this.alpha = alpha;
